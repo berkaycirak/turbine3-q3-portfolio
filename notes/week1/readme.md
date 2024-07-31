@@ -6,8 +6,8 @@ We have covered basics of the solana environment in that class and at the end of
 
 - [Account](#account)
 - [Programs](#program)
+- [PDA](#pda)
 - [Transaction](#transaction)
-- [IDL](#idl)
 - [SPL Token](#spl-token)
 
 ### [Account](#account)
@@ -20,11 +20,17 @@ All data is stored in `accounts` on Solana. You can think of it like a **key-val
 
 _Key-value pair demonstration from [Solana](https://solana.com/docs/core/accounts)_
 
+| Account Type    | Definition                                                        |
+| --------------- | ----------------------------------------------------------------- |
+| Data Account    | It stores the state of the program                                |
+| Program Account | It just stores the executable program code, not the state itself. |
+
 > [!IMPORTANT]
 > Accounts can store up to **10MB** of data, which can consist of either _executable program code_ or _program state_.
 
 > [!WARNING]
-> Accounts require a **rent** deposit in SOL, proportional to the amount of data stored, which is fully refundable when the account is closed.
+> Accounts require a [**rent**](https://solana.com/docs/core/fees) deposit in SOL, proportional to the amount of data stored, which is fully refundable when the account is closed.
+> **Rent-exemption** is required on Account creation.
 
 There is an `ownership terminology` in Solana which an account can only be created by the **System Program**. That is, owner of the account is actually System Program but it gives ownership to the related address that call that system program.
 
@@ -33,9 +39,9 @@ How an account info object looks like👇
 ```js
 {
 key: number,
-lamports: number,
-data: Uint8Array,
-is_executable: boolean,
+lamports: number,//Account's balance in lamports
+data: Uint8Array, //If the account is a program account, then data stores only executable program code
+is_executable: boolean, // Whether account is executable program or not
 owner: PublicKey,
 }
 ```
@@ -49,3 +55,37 @@ Each account is identifiable by its unique address, represented as 32 bytes in t
 _Account address demonstration from [Solana](https://solana.com/docs/core/accounts) Docs_
 
 ### [Programs](#programs)
+
+---
+
+Program accounts are marked as executable and they store only executable logic(code), not state itself. They refers to `smart contracts`
+
+➡️They can interact with non-executable accounts when they need to read or write the state(data).
+
+> [!NOTE]
+> Program owner is the address which loads the program to the on-chain.
+
+There are two types of programs
+|Program|Definition|Example|
+|-----|-----|----|
+|Native Programs|They are provided by Solana itself|`System Program`,`BPF Loader Program`, |
+|User Programs|They are written by us|many examples there are|
+
+### How to Write a Program?
+
+➡️ Generally, `Rust 🦀` programming language is used to write smart contracts on the Solana ecosystem.
+You can use one of the below tools to write a program,
+
+- Native Rust
+- Anchor (Beginner friendly)
+
+### How to Interact with a Program? - IDL
+
+If there is a written program, it generates an **IDL (Interface Design Language)** during build process. By using that IDL, on-chain programs can be reachable on the client side.
+
+👉You can examine an IDL example on the [ts-program](/ts/programs/wba_prereq.ts) file in that repo
+
+> [!NOTE]
+> They are just like an ABI on the Ethereum environment where solidity generally using. `JSON` formatting is used on IDLs and developers can easily understand the requirements of the program
+
+### [PDA (Program Derived Account)](#pda)
