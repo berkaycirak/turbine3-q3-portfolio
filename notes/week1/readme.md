@@ -6,7 +6,7 @@ We have covered basics of the solana environment in that class and at the end of
 
 - [Account](#account)
 - [Programs](#programs)
-- [PDA](#pda)
+- [PDA (Program Derived Account)](#pda)
 - [Transaction](#transaction)
 - [SPL Token](#spl-token)
 
