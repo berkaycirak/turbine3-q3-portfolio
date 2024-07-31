@@ -5,7 +5,7 @@
 We have covered basics of the solana environment in that class and at the end of the class, `spl-token` is used to demonstrate creating a fungible token.
 
 - [Account](#account)
-- [Programs](#program)
+- [Programs](#programs)
 - [PDA](#pda)
 - [Transaction](#transaction)
 - [SPL Token](#spl-token)
@@ -89,3 +89,22 @@ If there is a written program, it generates an **IDL (Interface Design Language)
 > They are just like an ABI on the Ethereum environment where solidity generally using. `JSON` formatting is used on IDLs and developers can easily understand the requirements of the program
 
 ### [PDA (Program Derived Account)](#pda)
+
+They are addresses that're deterministically derived and look like standard public keys, but have no associated private keys.
+
+> [!IMPORTANT]
+> Since they don't have a **Keypair** like wallet, they're bumped off the _Ed25519 curve_
+
+👉 A PDA can then be used as the address for an on-chain account, providing a method to easily store, map and fetch program state.
+==PDA enables us to easily find the address of an account at a later time.==
+
+![Off Curve PDA](/notes/week1/images/address-off-curve.svg)
+
+_Off Curve PDA demonstration from [Solana](https://solana.com/docs/core/pda) Docs_
+
+To derive a PDA,
+
+- We use `findProgramAddress(seed,programId)` function from `@solana/web3.js` ,
+
+> [!IMPORTANT]
+> If an account is using a PDA as its address, it must be **explicitly** created through a dedicated instruction within a solana program.
